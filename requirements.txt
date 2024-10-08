@@ -1,0 +1,8 @@
+git+https://${GITHUB_TOKEN}@github.com/chain-ml/theoriq-agent-sdk.git#egg=theoriq[flask]
+python-dotenv==1.0.*
+flask==3.0.*
+openai
+gunicorn
+redis==5.1.1
+
+
