@@ -11,6 +11,9 @@ RUN apt-get update && apt-get install -y git curl build-essential
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 
+# Ensure Python output is sent to the container log
+ENV PYTHONUNBUFFERED=1
+
 # Copy only the requirements file first
 COPY requirements.txt .
 
@@ -25,4 +28,4 @@ COPY . .
 EXPOSE 8000
 
 # Run the application with Gunicorn
-CMD ["gunicorn", "--workers", "3", "--bind", "0.0.0.0:8000", "main:application"]
+CMD ["gunicorn", "--workers", "3", "--bind", "0.0.0.0:8000", "--log-level", "info", "--access-logfile", "-", "--error-logfile", "-", "main:application"]

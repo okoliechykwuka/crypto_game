@@ -1,15 +1,21 @@
 import os
-import openai
+# import openai
 import random
 import dotenv
 import logging
+from groq import Groq
+
+
 
 dotenv.load_dotenv()
 logger = logging.getLogger(__name__)
 
 
 # Set up OpenAI API
-client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = Groq(
+                api_key=os.environ.get("GROQ_API_KEY"),
+            )
 
 if not client.api_key:
     raise ValueError("No OpenAI API key found. Please set the OPENAI_API_KEY in Colab Secrets.")
@@ -49,6 +55,7 @@ class CryptoGame:
                     "Begin the scenario with an emoji and format choices clearly for mobile reading. "
                     "Always end with three numbered choices for the player to choose from. "
                     "Ensure that the choices are presented only once and avoid any repetition."
+                    "Please ad-hear to all the rules and guidelines set forth in the game, don't miss out on any vital information. "
                 )
             },
             {"role": "user", "content": prompt}
@@ -60,7 +67,7 @@ class CryptoGame:
 
         try:
             response = client.chat.completions.create(
-                model="gpt-3.5-turbo",
+                model="llama-3.1-8b-instant",
                 messages=messages,
                 max_tokens=500,
                 n=1,
@@ -135,6 +142,7 @@ class CryptoGame:
             "Be very brief, humorous, insightful, and engaging in your evaluation. Highlight the strengths of their decision-making, but be mindful not to encourage risky or bad behavior. "
             "Commend them for prudent decisions, and provide a final score with a very short explanation. Mention any 'penalties' if relevant (e.g., 'I should deduct 20 for degen madness, but I'll let it slide!'). "
             "Tell them to share their game score and tag @TheoriqAI."
+            "Please ensure you ad-hear to all the instructions above."
         )
         final_feedback = self.generate_response(prompt + "\n\n" + summary)
         print(final_feedback)
