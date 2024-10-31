@@ -178,4 +178,6 @@ application = create_app()
 
 # Run the application if script is executed directly
 if __name__ == "__main__":
+    for rule in application.url_map.iter_rules():
+        print(f"Endpoint: {rule.endpoint}, URL: {rule.rule}")
     application.run(host="0.0.0.0", port=8000)
